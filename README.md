@@ -1,6 +1,6 @@
-# Kitchen Sink Bot
+# Karma Bot
 
-A kitchen-sink LINE bot example
+A Karma LINE bot example
 
 ## How to use
 
@@ -14,7 +14,7 @@ Also, FFmpeg and ImageMagick should be installed to test image and video
 echoing.
 
 ### Configuration
-
+  
 ``` shell
 export CHANNEL_SECRET=YOUR_CHANNEL_SECRET
 export CHANNEL_ACCESS_TOKEN=YOUR_CHANNEL_ACCESS_TOKEN
