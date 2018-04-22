@@ -101,7 +101,8 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken, source) {
-  const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
+  //const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
+  const buttonsImageURL = "https://my.ntu.edu.tw/Test/20170902113700.jpg";
 
   switch (message.text) {
     case 'profile':
