@@ -74,7 +74,19 @@ function handleEvent(event) {
       }
 
     case 'follow':
-      return replyText(event.replyToken, 'Got followed event');
+      //return replyText(event.replyToken, 'Got followed event');
+      if (event.source.userId) {
+        return client.getProfile(event.source.userId)
+          .then((profile) => replyText(
+            event.replyToken,
+            [
+              `Hello ${profile.displayName}, nice to meet you!`,
+              `I have read your statusMsg: ${profile.statusMessage}.`
+            ]
+          ));
+      } else {
+        return replyText(event.replyToken, 'Bot can\'t use profile API without user ID');
+      }
 
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
@@ -270,6 +282,10 @@ function handleText(message, replyToken, source) {
 }
 
 function handleImage(message, replyToken) {
+  const downloadDirPath = path.join(__dirname, 'downloaded');
+  if (!fs.existsSync(downloadDirPath)){
+        fs.mkdirSync(downloadDirPath);
+  }
   const downloadPath = path.join(__dirname, 'downloaded', `${message.id}.jpg`);
   const previewPath = path.join(__dirname, 'downloaded', `${message.id}-preview.jpg`);
 
