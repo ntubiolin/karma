@@ -1,0 +1,11 @@
+//var karmaCarouselPhotoUrl = "https://i.imgur.com/gjyHIQl";
+//var karmaCarouselPhotoUrl = "https://i.imgur.com/download/gjyHIQl";
+var karmaCarouselPhotoUrl = "https://i.imgur.com/ImA2SHJ.jpg";
+//var pensieveCarouselPhotoUrl = "https://imgur.com/download/rTBcvEj";
+var pensieveCarouselPhotoUrl = "https://i.imgur.com/wqP2Vuf.jpg";
+var achievementCarouselPhotoUrl = "https://i.imgur.com/Vp3VlH7.jpg";
+var activityCarouselPhotoUrl = "https://i.imgur.com/FDzMWKf.jpg";
+exports.karmaCarouselPhotoUrl = karmaCarouselPhotoUrl;
+exports.pensieveCarouselPhotoUrl = pensieveCarouselPhotoUrl;
+exports.achievementCarouselPhotoUrl = achievementCarouselPhotoUrl;
+exports.activityCarouselPhotoUrl = activityCarouselPhotoUrl;

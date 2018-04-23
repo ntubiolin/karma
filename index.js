@@ -6,6 +6,8 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 
+const myMsg = require('./messages');
+const myStr = require('./strings');
 // create LINE SDK config from env variables
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -74,19 +76,7 @@ function handleEvent(event) {
       }
 
     case 'follow':
-      //return replyText(event.replyToken, 'Got followed event');
-      if (event.source.userId) {
-        return client.getProfile(event.source.userId)
-          .then((profile) => replyText(
-            event.replyToken,
-            [
-              `Hello ${profile.displayName}, nice to meet you!`,
-              `I have read your statusMsg: ${profile.statusMessage}.`
-            ]
-          ));
-      } else {
-        return replyText(event.replyToken, 'Bot can\'t use profile API without user ID');
-      }
+      return replyText(event.replyToken, 'Got followed event');
 
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
@@ -113,10 +103,72 @@ function handleEvent(event) {
 }
 
 function handleText(message, replyToken, source) {
-  //const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
-  const buttonsImageURL = "https://my.ntu.edu.tw/Test/20170902113700.jpg";
+  const buttonsImageURL = `${baseURL}/static/buttons/1040.jpg`;
 
   switch (message.text) {
+    case 'help':
+      if (source.userId) {
+        return client.getProfile(source.userId)
+          .then((profile) => replyText(
+            replyToken,
+            [
+              `Hello ${profile.displayName}:${myMsg.helpMsg}`
+            ]
+          ));
+      } else {
+        return replyText(replyToken, 'Bot can\'t use profile API without user ID');
+      }
+    case 'karma':
+      return client.replyMessage(
+        replyToken,
+        {
+          type: 'template',
+          altText: 'Carousel alt text',
+          template: {
+            type: 'carousel',
+            columns: [
+              {
+                thumbnailImageUrl: myStr.karmaCarouselPhotoUrl,
+                title: 'Karma',
+                text: 'Karma helps you form habits.',
+                actions: [
+                  { label: 'New Money Karma', type: 'postback', data: 'hello こんにちは' },//TODO
+                  { label: 'New Reading Karma', type: 'postback', data: 'Form a new karma!' },
+                ],
+              },
+              {
+                thumbnailImageUrl: myStr.pensieveCarouselPhotoUrl,
+                title: 'Pensieve',
+                text: 'Pensieve helps you track your ideas.',
+                actions: [
+                  { label: 'New Pensieve', type: 'postback', data: 'hello こんにちは' },
+                  { label: 'List Pensieve', type: 'postback', data: 'Form a new karma!' },
+                ],
+              },
+              {
+                thumbnailImageUrl: myStr.activityCarouselPhotoUrl,
+                title: 'Activity',
+                text: 'Create or join an activity.',
+                actions: [
+                  { label: 'Create an activity', type: 'postback', data: 'hello こんにちは' },
+                  { label: 'Join an activity', type: 'postback', data: 'hello こんにちは' },
+                ],
+              },
+              {
+                thumbnailImageUrl: myStr.achievementCarouselPhotoUrl,
+                title: 'Achievement',
+                text: 'Achievement shows your karma.',
+                actions: [
+                  { label: 'Show', type: 'postback', data: 'hello こんにちは' },
+                  { label: 'View log', type: 'postback', data: 'hello こんにちは' },
+                ],
+              },
+            ],
+          },
+        }
+      );
+
+
     case 'profile':
       if (source.userId) {
         return client.getProfile(source.userId)
@@ -282,10 +334,6 @@ function handleText(message, replyToken, source) {
 }
 
 function handleImage(message, replyToken) {
-  const downloadDirPath = path.join(__dirname, 'downloaded');
-  if (!fs.existsSync(downloadDirPath)){
-        fs.mkdirSync(downloadDirPath);
-  }
   const downloadPath = path.join(__dirname, 'downloaded', `${message.id}.jpg`);
   const previewPath = path.join(__dirname, 'downloaded', `${message.id}-preview.jpg`);
 
