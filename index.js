@@ -1,5 +1,5 @@
 'use strict';
-
+var myMoney = 0;
 const line = require('@line/bot-sdk');
 const express = require('express');
 const fs = require('fs');
@@ -76,7 +76,18 @@ function handleEvent(event) {
       }
 
     case 'follow':
-      return replyText(event.replyToken, 'Got followed event');
+      //return replyText(event.replyToken, 'Got followed event');
+      if (event.source.userId) {
+        return client.getProfile(event.source.userId)
+          .then((profile) => replyText(
+            event.replyToken,
+            [
+              `Hello ${profile.displayName}:${myMsg.helpMsg}`
+            ]
+          ));
+      } else {
+        return replyText(replyToken, 'Bot can\'t use profile API without user ID');
+      }
 
     case 'unfollow':
       return console.log(`Unfollowed this bot: ${JSON.stringify(event)}`);
@@ -92,7 +103,14 @@ function handleEvent(event) {
       if (data === 'DATE' || data === 'TIME' || data === 'DATETIME') {
         data += `(${JSON.stringify(event.postback.params)})`;
       }
-      return replyText(event.replyToken, `Got postback: ${data}`);
+      if (data === 'MONEY_I'){
+        myMoney = myMoney + 1;
+        data = "Now my money becomes: " + myMoney;
+      }else if(data === 'MONEY_D'){
+        myMoney = myMoney - 1;
+        data = "Now my money becomes: " + myMoney;
+      }
+      return replyText(event.replyToken, `>>>${data}`);
 
     case 'beacon':
       return replyText(event.replyToken, `Got beacon: ${event.beacon.hwid}`);
@@ -130,10 +148,10 @@ function handleText(message, replyToken, source) {
               {
                 thumbnailImageUrl: myStr.karmaCarouselPhotoUrl,
                 title: 'Karma',
-                text: 'Karma helps you form habits.',
+                text: 'Karma helps you form the habit of recording your money.',
                 actions: [
-                  { label: 'New Money Karma', type: 'postback', data: 'hello こんにちは' },//TODO
-                  { label: 'New Reading Karma', type: 'postback', data: 'Form a new karma!' },
+                  { label: 'Money + 1', type: 'postback', data: 'MONEY_I' },//TODO
+                  { label: 'Money - 1', type: 'postback', data: 'MONEY_D' },//TODO
                 ],
               },
               {
@@ -141,26 +159,8 @@ function handleText(message, replyToken, source) {
                 title: 'Pensieve',
                 text: 'Pensieve helps you track your ideas.',
                 actions: [
-                  { label: 'New Pensieve', type: 'postback', data: 'hello こんにちは' },
-                  { label: 'List Pensieve', type: 'postback', data: 'Form a new karma!' },
-                ],
-              },
-              {
-                thumbnailImageUrl: myStr.activityCarouselPhotoUrl,
-                title: 'Activity',
-                text: 'Create or join an activity.',
-                actions: [
-                  { label: 'Create an activity', type: 'postback', data: 'hello こんにちは' },
-                  { label: 'Join an activity', type: 'postback', data: 'hello こんにちは' },
-                ],
-              },
-              {
-                thumbnailImageUrl: myStr.achievementCarouselPhotoUrl,
-                title: 'Achievement',
-                text: 'Achievement shows your karma.',
-                actions: [
-                  { label: 'Show', type: 'postback', data: 'hello こんにちは' },
-                  { label: 'View log', type: 'postback', data: 'hello こんにちは' },
+                  { label: 'New Pensieve', type: 'postback', data: '此功能尚未開放喔！' },
+                  { label: 'List Pensieve', type: 'postback', data: '此功能尚未開放喔！' },
                 ],
               },
             ],
